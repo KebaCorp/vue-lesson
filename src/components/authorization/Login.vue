@@ -57,6 +57,12 @@ import { axios } from '@/axios'
 export default {
   name: 'Login',
   computed: {
+    loading () {
+      return this.$store.getters['auth/loading']
+    },
+    token () {
+      return this.$store.getters['auth/token']
+    },
     usernameErrors () {
       const errors = []
       if (!this.$v.username.$dirty) return errors
@@ -75,15 +81,19 @@ export default {
     password: null
   }),
   methods: {
-    login () {
+    async login () {
       if (this.$v.$invalid) return false
 
-      axios.post('authorization/login', {
+      const { data } = await axios.post('authorization/login', {
         LoginForm: {
           username: this.username,
           password: this.password
         }
       })
+
+      if (data) {
+        this.$store.dispatch('auth/setToken', data.token)
+      }
       console.log(123)
     }
   },
