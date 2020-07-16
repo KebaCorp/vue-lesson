@@ -1,21 +1,50 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Authorization from '@/helpers/Authorization'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
-
 const router = new VueRouter({
-  routes
+  mode: 'history',
+  routes: [
+    {
+      path: '*',
+      redirect: { name: 'notFound' }
+    },
+    {
+      path: '/404',
+      name: 'notFound',
+      component: () => import(/* webpackChunkName: "notFound" */ '@/components/errors/NotFound')
+    },
+    {
+      path: '/',
+      name: 'main',
+      component: () => import(/* webpackChunkName: "main" */ '@/components/main/Main'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import(/* webpackChunkName: "login" */ '@/components/authorization/Login')
+    }
+  ]
+})
+
+/**
+ * Действия перед переходом по роуту.
+ */
+router.beforeEach((to, from, next) => {
+  const isAuthorized = Authorization.isAuthorized()
+
+  if (isAuthorized && to.name === 'login') {
+    next({ name: 'notFound' })
+  } else if (!isAuthorized && to.matched.some(record => record.meta.requiresAuth)) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
 })
 
 export default router
