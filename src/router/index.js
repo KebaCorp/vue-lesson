@@ -28,6 +28,26 @@ const router = new VueRouter({
       path: '/login',
       name: 'login',
       component: () => import(/* webpackChunkName: "login" */ '@/components/authorization/Login')
+    },
+    {
+      path: '/hero',
+      name: 'hero',
+      component: () => import(/* webpackChunkName: "hero" */ '@/components/hero/Hero'),
+      children: [
+        {
+          path: '/heroes',
+          name: 'heroes',
+          component: () => import(/* webpackChunkName: "heroes" */ '@/components/hero/Heroes')
+        },
+        {
+          path: '/hero/create',
+          name: 'heroCreate',
+          component: () => import(/* webpackChunkName: "heroCreate" */ '@/components/hero/HeroCreate'),
+          meta: {
+            requiresAuth: true
+          }
+        }
+      ]
     }
   ]
 })

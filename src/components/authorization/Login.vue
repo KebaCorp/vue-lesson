@@ -82,13 +82,13 @@ export default {
     usernameErrors () {
       const errors = []
       if (!this.$v.username.$dirty) return errors
-      if (!this.$v.username.required) errors.push('dfdsfsdf')
+      if (!this.$v.username.required) errors.push(this.$i18n.t('validation.required'))
       return errors
     },
     passwordErrors () {
       const errors = []
       if (!this.$v.password.$dirty) return errors
-      if (!this.$v.password.required) errors.push('dfdsfsdf')
+      if (!this.$v.password.required) errors.push(this.$i18n.t('validation.required'))
       return errors
     }
   },
