@@ -24,9 +24,15 @@
         color="success"
         :to="{ name: 'heroCreate' }"
         class="mr-2"
+        :icon="$vuetify.breakpoint.xsOnly"
       >
-        <v-icon left>mdi-plus</v-icon>
-        <span class="mr-2">{{ $t('hero.heroAdd') }}</span>
+        <v-icon :left="$vuetify.breakpoint.smAndUp">mdi-plus</v-icon>
+        <span
+          v-if="$vuetify.breakpoint.smAndUp"
+          class="mr-2"
+        >
+          {{ $t('hero.heroAdd') }}
+        </span>
       </v-btn>
 
       <!--User toolbar menu-->

@@ -1,5 +1,5 @@
 <template>
-  <v-layout justify-center py-12>
+  <v-layout justify-center pt-5 pb-12>
     <v-flex xs12 sm8 md6 lg5 pb-12>
 
       <!--Breadcrumbs-->
@@ -24,8 +24,21 @@
               class="mt-5"
             />
 
+            <!--Main photo-->
+            <v-flex
+              mt-2
+              xs12
+              lg6
+            >
+              <h4 class="text-xs-left mb-2">{{ $t('hero.mainPhoto') }}:</h4>
+              <image-view-upload
+                v-model="mainPhoto"
+                :errors="mainPhotoErrors"
+              />
+            </v-flex>
+
             <!--Short description-->
-            <h4 class="mt-2 mb-1">{{ $t('hero.shortDescription') }}</h4>
+            <h4 class="mt-10 mb-1">{{ $t('hero.shortDescription') }}</h4>
             <content-editor
               :value="shortDescription"
               @onChange="changeShortDescription"
@@ -43,8 +56,9 @@
             <!--Create-->
             <v-btn
               block
+              :loading="loading"
               :disabled="$v.$invalid"
-              class="mt-8"
+              class="mt-10"
               color="success"
               @click="create"
             >
@@ -60,23 +74,35 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 
 const ContentEditor = () => import('../main/ContentEditor')
 const ErrorMessages = () => import('../main/ErrorMessages')
+const ImageViewUpload = () => import('@/components/main/ImageViewUpload')
 
 export default {
   name: 'HeroCreate',
   components: {
     ContentEditor,
-    ErrorMessages
+    ErrorMessages,
+    ImageViewUpload
   },
   computed: {
+    ...mapGetters('heroes', [
+      'loading'
+    ]),
     fullNameErrors () {
       const errors = []
       if (!this.$v.fullName.$dirty) return errors
       if (!this.$v.fullName.required) errors.push(this.$i18n.t('validation.required'))
+      return errors
+    },
+    mainPhotoErrors () {
+      const errors = []
+      if (!this.$v.mainPhoto.$dirty) return errors
+      if (!this.$v.mainPhoto.required) errors.push(this.$i18n.t('validation.required'))
       return errors
     },
     shortDescriptionErrors () {
@@ -108,6 +134,7 @@ export default {
   },
   data: () => ({
     fullName: null,
+    mainPhoto: null,
     shortDescription: null,
     description: null
   }),
@@ -123,10 +150,14 @@ export default {
       this.$store.dispatch('heroes/create', {
         Hero: {
           fullName: this.fullName,
+          mainPhoto: this.mainPhoto,
           shortDescription: this.shortDescription,
           description: this.description
         }
       })
+        .then(() => {
+          this.clearForm()
+        })
     },
     changeShortDescription ({ value }) {
       this.shortDescription = value
@@ -135,11 +166,21 @@ export default {
     changeDescription ({ value }) {
       this.description = value
       this.$v.description.$touch()
+    },
+    clearForm () {
+      this.fullName = null
+      this.mainPhoto = null
+      this.shortDescription = null
+      this.description = null
+      this.$v.$reset()
     }
   },
   mixins: [validationMixin],
   validations: {
     fullName: {
+      required
+    },
+    mainPhoto: {
       required
     },
     shortDescription: {

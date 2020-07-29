@@ -1,6 +1,6 @@
 <template>
-  <v-layout justify-center pt-12>
-    <v-flex xs12 sm8 md6 lg5>
+  <v-layout justify-center pt-5 pb-12>
+    <v-flex xs12 sm8 md6 lg5 pb-12>
 
       <!--Breadcrumbs-->
       <v-breadcrumbs :items="breadcrumbs"/>

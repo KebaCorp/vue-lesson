@@ -3,7 +3,7 @@ import { axios } from '@/axios'
 export default {
   namespaced: true,
   state: {
-    loading: true,
+    loading: false,
     heroes: []
   },
   getters: {

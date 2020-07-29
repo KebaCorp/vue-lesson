@@ -7,6 +7,7 @@ import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 import '@/resources/main.sass'
+import './resources/quill-content.css'
 import i18n from './locales'
 
 Vue.config.productionTip = false
