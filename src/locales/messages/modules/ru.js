@@ -1,14 +1,19 @@
 export default {
   app: {
-    name: 'Урок'
+    name: 'Урок',
+    defaultUserImage: '/img/default-user.png'
   },
   content: {
     username: 'Логин',
     password: 'Пароль',
     login: 'Войти',
+    logout: 'Выйти',
     fullName: 'ФИО',
     create: 'Создать',
-    add: 'Добавить'
+    add: 'Добавить',
+    enterValue: 'Введите значение',
+    goBack: 'Назад',
+    tryFollowingPages: 'Пожалуйста, попробуйте перейти на одну из следующих страниц:'
   },
   menu: {
     main: 'Главная',
@@ -31,6 +36,8 @@ export default {
     sectionsValueRule: 'Необходимо заполнить все поля активных секций'
   },
   hero: {
-    heroAdd: 'Добавить героя'
+    heroAdd: 'Добавить героя',
+    shortDescription: 'Краткое описание',
+    description: 'Описание'
   }
 }

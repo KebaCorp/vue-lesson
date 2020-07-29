@@ -17,7 +17,10 @@
       >
         <v-card-title class="white--text">{{ $t('app.name') }}</v-card-title>
         <v-card-text>
-          <v-form>
+          <v-form
+            @submit="login"
+            class="authorization-form"
+          >
 
             <!--Username-->
             <v-text-field
@@ -25,6 +28,7 @@
               :placeholder="$t('content.username')"
               solo-inverted
               dark
+              type="text"
               :error-messages="usernameErrors"
             />
 
@@ -34,28 +38,23 @@
               :placeholder="$t('content.password')"
               solo-inverted
               dark
+              type="password"
               :error-messages="passwordErrors"
             />
 
             <!--Login-->
             <v-btn
-              dark
-              large
-              block
               :disabled="$v.$invalid"
-              @click="login"
+              dark
+              text
+              type="submit"
+              block
+              :loading="loading"
+              outlined
+              large
+              @click.prevent="login"
             >
               {{ $t('content.login') }}
-            </v-btn>
-
-            <!--Login-->
-            <v-btn
-              dark
-              large
-              block
-              @click="test"
-            >
-              test
             </v-btn>
 
           </v-form>
@@ -69,7 +68,6 @@
 import { mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
-import { axios } from '@/axios'
 
 export default {
   name: 'Login',
@@ -100,23 +98,17 @@ export default {
     async login () {
       if (this.$v.$invalid) return false
 
-      try {
-        const { data } = await axios.post('authorization/login', {
-          LoginForm: {
-            username: this.username,
-            password: this.password
+      this.$store.dispatch('auth/login', {
+        LoginForm: {
+          username: this.username,
+          password: this.password
+        }
+      })
+        .then(result => {
+          if (result) {
+            this.$router.push({ name: 'main' })
           }
         })
-
-        if (data) {
-          this.$store.dispatch('auth/setToken', data.token)
-          this.$router.push({ name: 'main' })
-        }
-      } catch (e) {
-      }
-    },
-    async test () {
-      await axios.post('closed/authorization/test')
     }
   },
   mixins: [validationMixin],
@@ -131,6 +123,29 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+  .authorization-form {
+    .v-input__slot {
+      background-color: #566267 !important;
+    }
 
+    .v-input--is-focused .v-input__slot {
+      background-color: #ffffff !important;
+    }
+
+    .v-text-field__slot input {
+      box-shadow: inset 0 0 0 50px #566267;
+      -webkit-box-shadow: inset 0 0 0 50px #566267;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+      transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    }
+
+    .v-text-field__slot input:focus {
+      box-shadow: inset 0 0 0 50px #ffffff;
+      -webkit-box-shadow: inset 0 0 0 50px #ffffff;
+      color: #111111;
+      -webkit-text-fill-color: #111111;
+    }
+  }
 </style>

@@ -4,7 +4,7 @@ import { axios } from '@/axios'
 export default {
   namespaced: true,
   state: {
-    loading: true,
+    loading: false,
     token: Authorization.getAccessToken(),
     isAuthorized: Authorization.isAuthorized()
   },
@@ -32,11 +32,48 @@ export default {
 
       state.token = token
       state.isAuthorized = Authorization.isAuthorized()
+    },
+    clearToken (state) {
+      Authorization.clearData()
+
+      state.token = Authorization.getAccessToken()
+      state.isAuthorized = Authorization.isAuthorized()
+    },
+    clearLocalStorage () {
+      localStorage.removeItem('user')
     }
   },
   actions: {
     setToken ({ commit }, payload) {
       commit('setToken', payload)
+    },
+
+    /**
+     * Login.
+     *
+     * @param commit
+     * @param LoginForm
+     * @returns {Promise<boolean>}
+     */
+    async login ({ commit }, { LoginForm }) {
+      commit('toggleLoading', true)
+
+      try {
+        const { data } = await axios.post('authorization/login', {
+          LoginForm
+        })
+
+        if (data && data.token) {
+          commit('setToken', data.token)
+          return true
+        } else {
+        }
+      } catch (e) {
+      } finally {
+        commit('toggleLoading', false)
+      }
+
+      return false
     },
 
     /**
@@ -63,6 +100,18 @@ export default {
       } finally {
         commit('toggleLoading', false)
       }
+
+      return true
+    },
+
+    /**
+     * Logout.
+     *
+     * @param commit
+     */
+    async logout ({ commit }) {
+      commit('clearToken')
+      commit('clearLocalStorage')
 
       return true
     }

@@ -1,6 +1,6 @@
 <template>
-  <v-layout justify-center pt-12>
-    <v-flex xs12 sm8 md6 lg5>
+  <v-layout justify-center py-12>
+    <v-flex xs12 sm8 md6 lg5 pb-12>
 
       <!--Breadcrumbs-->
       <v-breadcrumbs :items="breadcrumbs"/>
@@ -17,16 +17,35 @@
             <!--Full name-->
             <v-text-field
               v-model="$v.fullName.$model"
-              :placeholder="$t('content.fullName')"
+              :label="$t('content.fullName')"
               :error-messages="fullNameErrors"
               clearable
               outlined
+              class="mt-5"
             />
+
+            <!--Short description-->
+            <h4 class="mt-2 mb-1">{{ $t('hero.shortDescription') }}</h4>
+            <content-editor
+              :value="shortDescription"
+              @onChange="changeShortDescription"
+            />
+            <error-messages :messages="shortDescriptionErrors" class="mt-2"/>
+
+            <!--Description-->
+            <h4 class="mt-10 mb-1">{{ $t('hero.description') }}</h4>
+            <content-editor
+              :value="description"
+              @onChange="changeDescription"
+            />
+            <error-messages :messages="descriptionErrors" class="mt-2"/>
 
             <!--Create-->
             <v-btn
               block
               :disabled="$v.$invalid"
+              class="mt-8"
+              color="success"
               @click="create"
             >
               {{ $t('content.add') }}
@@ -44,13 +63,32 @@
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
 
+const ContentEditor = () => import('../main/ContentEditor')
+const ErrorMessages = () => import('../main/ErrorMessages')
+
 export default {
   name: 'HeroCreate',
+  components: {
+    ContentEditor,
+    ErrorMessages
+  },
   computed: {
     fullNameErrors () {
       const errors = []
       if (!this.$v.fullName.$dirty) return errors
       if (!this.$v.fullName.required) errors.push(this.$i18n.t('validation.required'))
+      return errors
+    },
+    shortDescriptionErrors () {
+      const errors = []
+      if (!this.$v.shortDescription.$dirty) return errors
+      if (!this.$v.shortDescription.required) errors.push(this.$i18n.t('validation.required'))
+      return errors
+    },
+    descriptionErrors () {
+      const errors = []
+      if (!this.$v.description.$dirty) return errors
+      if (!this.$v.description.required) errors.push(this.$i18n.t('validation.required'))
       return errors
     },
     breadcrumbs () {
@@ -69,7 +107,9 @@ export default {
     }
   },
   data: () => ({
-    fullName: null
+    fullName: null,
+    shortDescription: null,
+    description: null
   }),
   methods: {
     /**
@@ -82,14 +122,30 @@ export default {
 
       this.$store.dispatch('heroes/create', {
         Hero: {
-          fullName: this.fullName
+          fullName: this.fullName,
+          shortDescription: this.shortDescription,
+          description: this.description
         }
       })
+    },
+    changeShortDescription ({ value }) {
+      this.shortDescription = value
+      this.$v.shortDescription.$touch()
+    },
+    changeDescription ({ value }) {
+      this.description = value
+      this.$v.description.$touch()
     }
   },
   mixins: [validationMixin],
   validations: {
     fullName: {
+      required
+    },
+    shortDescription: {
+      required
+    },
+    description: {
       required
     }
   }
