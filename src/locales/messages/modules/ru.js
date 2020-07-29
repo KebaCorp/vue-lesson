@@ -7,7 +7,12 @@ export default {
     password: 'Пароль',
     login: 'Войти',
     fullName: 'ФИО',
-    create: 'Создать'
+    create: 'Создать',
+    add: 'Добавить'
+  },
+  menu: {
+    main: 'Главная',
+    heroCreate: 'Добавить героя'
   },
   validation: {
     required: 'Необходимо заполнить поле',
@@ -26,6 +31,6 @@ export default {
     sectionsValueRule: 'Необходимо заполнить все поля активных секций'
   },
   hero: {
-    heroCreate: 'Создание героя'
+    heroAdd: 'Добавить героя'
   }
 }

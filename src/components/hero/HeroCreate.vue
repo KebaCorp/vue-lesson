@@ -1,11 +1,15 @@
 <template>
   <v-layout justify-center pt-12>
     <v-flex xs12 sm8 md6 lg5>
+
+      <!--Breadcrumbs-->
+      <v-breadcrumbs :items="breadcrumbs"/>
+
       <v-card
         :elevation="$vuetify.breakpoint.smAndUp ? 10 : 0"
       >
         <v-card-title>
-          {{ $t('hero.heroCreate') }}
+          {{ $t('hero.heroAdd') }}
         </v-card-title>
         <v-card-text>
           <v-form>
@@ -25,12 +29,13 @@
               :disabled="$v.$invalid"
               @click="create"
             >
-              {{ $t('content.create') }}
+              {{ $t('content.add') }}
             </v-btn>
 
           </v-form>
         </v-card-text>
       </v-card>
+
     </v-flex>
   </v-layout>
 </template>
@@ -47,6 +52,20 @@ export default {
       if (!this.$v.fullName.$dirty) return errors
       if (!this.$v.fullName.required) errors.push(this.$i18n.t('validation.required'))
       return errors
+    },
+    breadcrumbs () {
+      return [
+        {
+          text: this.$i18n.t('menu.main'),
+          disabled: false,
+          to: { name: 'main' }
+        },
+        {
+          text: this.$i18n.t('menu.heroCreate'),
+          disabled: true,
+          to: { name: 'heroCreate' }
+        }
+      ]
     }
   },
   data: () => ({

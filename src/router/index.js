@@ -19,6 +19,7 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'main',
+      redirect: { name: 'heroes' },
       component: () => import(/* webpackChunkName: "main" */ '@/components/main/Main'),
       meta: {
         requiresAuth: true
