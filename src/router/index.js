@@ -36,6 +36,11 @@ const router = new VueRouter({
       component: () => import(/* webpackChunkName: "hero" */ '@/components/hero/Hero'),
       children: [
         {
+          path: '/hero/:id',
+          name: 'heroView',
+          component: () => import(/* webpackChunkName: "heroView" */ '@/components/hero/HeroView')
+        },
+        {
           path: '/heroes',
           name: 'heroes',
           component: () => import(/* webpackChunkName: "heroes" */ '@/components/hero/Heroes')

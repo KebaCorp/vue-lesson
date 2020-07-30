@@ -77,6 +77,7 @@
 import { mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
+import Hero from '@/models/Hero'
 
 const ContentEditor = () => import('../main/ContentEditor')
 const ErrorMessages = () => import('../main/ErrorMessages')
@@ -147,14 +148,14 @@ export default {
     create () {
       if (this.$v.$invalid) return false
 
-      this.$store.dispatch('heroes/create', {
-        Hero: {
-          fullName: this.fullName,
-          mainPhoto: this.mainPhoto,
-          shortDescription: this.shortDescription,
-          description: this.description
-        }
+      const hero = new Hero({
+        fullName: this.fullName,
+        mainPhoto: this.mainPhoto,
+        shortDescription: this.shortDescription,
+        description: this.description
       })
+
+      this.$store.dispatch('heroes/create', { hero })
         .then(() => {
           this.clearForm()
         })

@@ -47,15 +47,15 @@ export default {
      * Create hero.
      *
      * @param commit
-     * @param Hero
+     * @param hero
      * @returns {Promise<boolean>}
      */
-    async create ({ commit }, { Hero }) {
+    async create ({ commit }, { hero }) {
       commit('toggleLoading', true)
 
       try {
         await axios.post('closed/hero/create', {
-          Hero
+          Hero: hero
         })
       } catch (e) {
         return false
