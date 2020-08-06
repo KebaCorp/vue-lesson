@@ -53,6 +53,17 @@
             />
             <error-messages :messages="descriptionErrors" class="mt-2"/>
 
+            <!--Keywords-->
+            <v-combobox
+              v-model="keywords"
+              :error-messages="keywordsErrors"
+              chips
+              deletable-chips
+              :label="$t('content.keywords')"
+              multiple
+              class="mt-5"
+            />
+
             <!--Create-->
             <v-btn
               block
@@ -118,6 +129,12 @@ export default {
       if (!this.$v.description.required) errors.push(this.$i18n.t('validation.required'))
       return errors
     },
+    keywordsErrors () {
+      const errors = []
+      if (!this.$v.keywords.$dirty) return errors
+      if (!this.$v.keywords.required) errors.push(this.$i18n.t('validation.required'))
+      return errors
+    },
     breadcrumbs () {
       return [
         {
@@ -137,7 +154,8 @@ export default {
     fullName: null,
     mainPhoto: null,
     shortDescription: null,
-    description: null
+    description: null,
+    keywords: []
   }),
   methods: {
     /**
@@ -152,7 +170,8 @@ export default {
         fullName: this.fullName,
         mainPhoto: this.mainPhoto,
         shortDescription: this.shortDescription,
-        description: this.description
+        description: this.description,
+        keywords: this.keywords
       })
 
       this.$store.dispatch('heroes/create', { hero })
@@ -173,6 +192,7 @@ export default {
       this.mainPhoto = null
       this.shortDescription = null
       this.description = null
+      this.keywords = []
       this.$v.$reset()
     }
   },
@@ -188,6 +208,9 @@ export default {
       required
     },
     description: {
+      required
+    },
+    keywords: {
       required
     }
   }

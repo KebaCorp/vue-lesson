@@ -9,6 +9,7 @@ export default class Hero {
   description = null
   views = null
   creatorUserId = null
+  keywords = []
   createdAt = null
   updatedAt = null
 
@@ -22,10 +23,11 @@ export default class Hero {
    * @param description
    * @param views
    * @param creatorUserId
+   * @param keywords
    * @param createdAt
    * @param updatedAt
    */
-  constructor ({ _id, fullName, mainPhoto, shortDescription, description, views, creatorUserId, createdAt, updatedAt }) {
+  constructor ({ _id, fullName, mainPhoto, shortDescription, description, views, creatorUserId, keywords, createdAt, updatedAt }) {
     this._id = _id || null
     this.fullName = fullName || null
     this.mainPhoto = mainPhoto || null
@@ -33,6 +35,7 @@ export default class Hero {
     this.description = description || null
     this.views = views || null
     this.creatorUserId = creatorUserId || null
+    this.keywords = keywords || []
     this.createdAt = createdAt || null
     this.updatedAt = updatedAt || null
   }
@@ -80,5 +83,14 @@ export default class Hero {
    */
   getViews () {
     return this.views
+  }
+
+  /**
+   * Keywords.
+   *
+   * @returns {*}
+   */
+  getKeywords () {
+    return Array.isArray(this.keywords) ? this.keywords : []
   }
 }

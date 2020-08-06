@@ -13,6 +13,7 @@ export default {
     add: 'Добавить',
     enterValue: 'Введите значение',
     goBack: 'Назад',
+    keywords: 'Ключевые слова',
     tryFollowingPages: 'Пожалуйста, попробуйте перейти на одну из следующих страниц:'
   },
   menu: {
